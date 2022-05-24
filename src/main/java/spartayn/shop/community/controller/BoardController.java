@@ -3,6 +3,7 @@ package spartayn.shop.community.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spartayn.shop.community.domain.*;
+import spartayn.shop.community.service.BoardService;
 
 import java.util.List;
 
@@ -10,12 +11,13 @@ import java.util.List;
 @RestController
 public class BoardController {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
+    private final BoardService boardService;
 
     // 게시글 리스트 정보 전달
     @GetMapping("/api/boards")
-    public List<Board> getBoards() {
-        return boardRepository.getMainPageBoards();
+    public List<BoardMainPageResponseDto> getBoards() {
+        return boardService.getBoards();
     }
 
     // 게시글 저장
@@ -28,11 +30,7 @@ public class BoardController {
     // 특정 게시글 조회
     @GetMapping("/api/boards/{id}")
     public Board getBoard(@PathVariable Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다.")
-        );
-
-        return board;
+        return boardService.getBoard(id);
     }
 
     // 특정 게시글 수정
@@ -40,32 +38,14 @@ public class BoardController {
     public Long updateBoard(@PathVariable Long id,
                             @RequestBody BoardContentsUpdateRequestDto requestDto) {
 
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다.")
-        );
-
-        if (board.checkPassword(requestDto.getPassword())) {
-            board.updateContents(requestDto);
-            return board.getId();
-        }
-
-        return 0L;
+        return boardService.update(id, requestDto);
     }
 
     // 특정 게시글 삭제
-    @DeleteMapping("/api/board/{id}")
+    @DeleteMapping("/api/boards/{id}")
     public Long deleteBoard(@PathVariable Long id,
                             @RequestBody BoardDeleteRequestDto requestDto) {
 
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다.")
-        );
-
-        if (board.checkPassword(requestDto.getPassword())) {
-            boardRepository.deleteById(id);
-            return id;
-        }
-
-        return 0L;
+        return boardService.delete(id, requestDto);
     }
 }
