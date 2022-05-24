@@ -1,8 +1,10 @@
 package spartayn.shop.community.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BoardCreateRequestDto {
 
     /**
@@ -13,4 +15,11 @@ public class BoardCreateRequestDto {
     private String contents;
     private String writer;
     private String password;
+
+    public BoardCreateRequestDto(String title, String contents, String writer, String password) {
+        this.title = title;
+        this.contents = contents;
+        this.writer = writer;
+        this.password = password;
+    }
 }
