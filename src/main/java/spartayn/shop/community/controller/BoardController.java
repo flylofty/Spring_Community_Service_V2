@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 public class BoardController {
 
-    private final BoardRepository boardRepository;
     private final BoardService boardService;
 
     // 게시글 리스트 정보 전달
@@ -23,8 +22,7 @@ public class BoardController {
     // 게시글 저장
     @PostMapping("/api/boards")
     public Long saveBoard(@RequestBody BoardCreateRequestDto requestDto) {
-        Board board = new Board(requestDto);
-        return boardRepository.save(board).getId();
+        return boardService.save(requestDto);
     }
 
     // 특정 게시글 조회

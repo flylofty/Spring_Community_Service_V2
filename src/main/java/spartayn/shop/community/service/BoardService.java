@@ -31,6 +31,11 @@ public class BoardService {
         return board;
     }
 
+    @Transactional
+    public Long save(BoardCreateRequestDto requestDto) {
+        return boardRepository.save(new Board(requestDto)).getId();
+    }
+
     // 특정 게시글 내용 수정
     @Transactional
     public Long update(Long id, BoardContentsUpdateRequestDto requestDto) {
