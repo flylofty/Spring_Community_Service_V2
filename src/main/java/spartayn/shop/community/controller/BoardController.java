@@ -27,8 +27,8 @@ public class BoardController {
 
     // 특정 게시글 조회
     @GetMapping("/api/boards/{id}")
-    public Board getBoard(@PathVariable Long id) {
-        return boardService.getBoard(id);
+    public BoardResponseDto getBoard(@PathVariable Long id) {
+        return new BoardResponseDto(boardService.getBoard(id));
     }
 
     // 특정 게시글 수정
