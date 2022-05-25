@@ -6,6 +6,11 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta property="og:title" content="자유 게시판">
+    <meta property="og:description" content="자유롭게 글을 작성해보세요^^">
+    <meta property="og:image" content="images/pencil_write_icon.png">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -13,12 +18,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script src="basic.js"></script>
-    <title>나만의 셀렉샵</title>
+    <title>Free Community</title>
 </head>
 
 <body>
     <div class="header">
-        Community
+        Community 0.9v
     </div>
 
     <div class="nav">
@@ -40,10 +45,10 @@
 
                 <thead>
                     <tr>
-                        <th scope="col">번 호</th>
-                        <th scope="col">제 목</th>
-                        <th scope="col">작성자</th>
-                        <th scope="col">날 짜</th>
+                        <th scope="col" width="10%">번 호</th>
+                        <th scope="col" width="55%">제 목</th>
+                        <th scope="col" width="15%">작성자</th>
+                        <th scope="col" width="20%">날 짜</th>
                     </tr>
                 </thead>
 
@@ -81,9 +86,7 @@
         </div>
 
         <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here"
-                      id="contents" style="height: 180px">
-            </textarea>
+            <textarea class="form-control" placeholder="Leave a comment here" id="contents" style="height: 180px"></textarea>
             <label for="contents">작성 내용</label>
         </div>
 

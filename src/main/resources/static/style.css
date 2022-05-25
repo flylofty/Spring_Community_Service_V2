@@ -28,8 +28,12 @@ body {
     float: right;
 }
 
+#board-td {
+    cursor: pointer;
+}
+
 #board-td:hover {
-    color: dodgerblue;
+    color: blue;
 }
 
 /*#board-content {*/
@@ -109,19 +113,6 @@ body {
     vertical-align: middle;
     margin-top: 60px;
     cursor: pointer;
-}
-
-input#query {
-    padding: 15px;
-    width: 526px;
-    border-radius: 2px;
-    background-color: #e9ecef;
-    border: none;
-
-    background-image: url('images/icon-search.png');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 20px 20px;
 }
 
 input#query::placeholder {
@@ -215,10 +206,6 @@ button {
 #board-area {
     width: 530px;
     margin: 50px auto;
-}
-
-.td {
-    overflow: hidden;
 }
 
 .nav {

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $('#close').on('click', function () {
         $('#container').removeClass('active');
     })
@@ -28,6 +27,12 @@ $(document).ready(function () {
 
     showBoards();
 })
+
+function clearModalForm() {
+    $('#updatePassword').empty();
+    $('#updateContents').empty();
+    $('#deletePassword').empty();
+}
 
 function getBoard(id) {
     $.ajax({
@@ -58,12 +63,9 @@ function getBoard(id) {
                                     <div class="mb-3" id="update-input">
                                         <input type="password" class="form-control" id="updatePassword" placeholder="비밀번호">
                                     </div>
-
+                                    
                                     <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                                  id="updateContents" style="height: 100px">
-                                        ${response.contents}
-                                        </textarea>
+                                        <textarea class="form-control" placeholder="Leave a comment here" id="updateContents" style="height: 100px">${response.contents}</textarea>
                                         <label for="updateContents">수정 내용</label>
                                     </div>
                                     

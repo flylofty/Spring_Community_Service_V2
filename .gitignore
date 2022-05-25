@@ -6,6 +6,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/main/java/spartayn/shop/community/controller/TestDataController.java
+/src/main/resources/static/images
+/src/main/resources/application-db.properties
 
 ### STS ###
 .apt_generated
