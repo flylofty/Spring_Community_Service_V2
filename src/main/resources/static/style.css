@@ -203,7 +203,7 @@ button {
 }
 
 #see-area {
-    width: 530px;
+    width: 700px;
     margin: auto;
 }
 
@@ -215,6 +215,10 @@ button {
 #board-area {
     width: 530px;
     margin: 50px auto;
+}
+
+.td {
+    overflow: hidden;
 }
 
 .nav {
