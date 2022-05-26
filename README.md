@@ -20,6 +20,22 @@
 
 ---
 
+## DB Table 간단 정의 및 API 문서
+
 [간단 DB 테이블 정의](https://www.notion.so/30dd0b84773543de908e4cb43a4d26c4)
 
 [API_문서](https://www.notion.so/497752e273484339a6fedb9756b6af20)
+
+---
+
+## 화면 소개
+
+### 메인 페이지
+![jpg_1](./view_images/main.JPG)
+
+### 글작성 페이지
+![jpg_2](./view_images/write.JPG)
+
+### 상세 게시글 페이지
+![jpg_3](./view_images/board_page.JPG)
+
