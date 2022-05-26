@@ -1,6 +1,6 @@
 # 설계 방향
 
-# 요청 방식 및 RESTful 이유
+## 요청 방식 및 RESTful 이유
 
 ### 1. 수정, 삭제 API의 request 방식
 
