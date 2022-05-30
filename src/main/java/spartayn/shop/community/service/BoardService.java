@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spartayn.shop.community.domain.*;
+import spartayn.shop.community.dto.BoardContentsUpdateRequestDto;
+import spartayn.shop.community.dto.BoardCreateRequestDto;
+import spartayn.shop.community.dto.BoardDeleteRequestDto;
+import spartayn.shop.community.dto.BoardMainPageResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

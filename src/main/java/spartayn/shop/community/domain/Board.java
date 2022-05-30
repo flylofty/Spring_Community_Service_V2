@@ -2,6 +2,8 @@ package spartayn.shop.community.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spartayn.shop.community.dto.BoardContentsUpdateRequestDto;
+import spartayn.shop.community.dto.BoardCreateRequestDto;
 
 import javax.persistence.*;
 

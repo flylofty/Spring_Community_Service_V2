@@ -2,7 +2,7 @@ package spartayn.shop.community.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import spartayn.shop.community.domain.*;
+import spartayn.shop.community.dto.*;
 import spartayn.shop.community.service.BoardService;
 
 import java.util.List;
