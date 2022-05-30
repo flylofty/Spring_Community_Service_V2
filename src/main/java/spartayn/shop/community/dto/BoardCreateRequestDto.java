@@ -1,4 +1,4 @@
-package spartayn.shop.community.domain;
+package spartayn.shop.community.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
