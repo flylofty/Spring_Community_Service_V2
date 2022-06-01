@@ -19,7 +19,48 @@ body {
     float: right;
 }
 
+#write-btn2 {
+    margin: 20px auto;
+    float: right;
+}
+
+#write-btn3 {
+    margin: 20px auto;
+    float: right;
+}
+
+#write-btn4 {
+    margin: 5px auto;
+    float: right;
+    height: 80px;
+}
+
+#comment-box {
+    display: flex;
+    flex-direction: row; /*column과 row만 바꿔서 쓴다*/
+    justify-content: center;
+    align-items: center;
+}
+
+#comment-btn > button {
+    height: 20px;
+    font-size: 9px;
+    line-height: initial;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+#floatingTextarea2 {
+    width: 460px;
+    resize: none;
+}
+
 #board-hr {
+    border: 5px #000000;
+}
+
+#comment-hr {
     border: 5px #000000;
 }
 
@@ -36,9 +77,50 @@ body {
     color: blue;
 }
 
-/*#board-content {*/
-/*    width: 500px;*/
-/*}*/
+#board-content {
+    height: 200px;
+}
+
+#login-text {
+    position:absolute;
+    top:48px;
+    right:48px;
+    font-size: 18px;
+    font-family: SpoqaHanSansNeo;
+    font-size: 18px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.36px;
+    text-align: center;
+    color: #ffffff;
+}
+
+#comment-writer {
+    flex: 1;
+}
+
+#comment-date {
+    flex: 7;
+}
+
+#comment-btn {
+    flex: 2;
+    display: flex;
+}
+
+#comment-info {
+    height: 20px;
+    display: flex;
+    flex-direction: row; /*column과 row만 바꿔서 쓴다*/
+    justify-content: space-between;
+    /*align-items: center;*/
+}
+
+#comment-contents {
+    height: 20px;
+}
 
 .search-itemDto {
     width: 530px;
@@ -125,6 +207,10 @@ button {
 }
 
 #update-input {
+    margin-top: 10px;
+}
+
+#update-input2 {
     margin-top: 10px;
 }
 

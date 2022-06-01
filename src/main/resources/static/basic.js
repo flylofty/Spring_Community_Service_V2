@@ -1,4 +1,15 @@
 $(document).ready(function () {
+
+    // if ($.cookie('token')) {
+    //     $.ajaxSetup({
+    //         headers:{
+    //             'Authorization': $.cookie('token')
+    //         }
+    //     })
+    // } else {
+    //     window.location.href = '/user/loginView';
+    // }
+
     $('#close').on('click', function () {
         $('#container').removeClass('active');
     })
@@ -13,12 +24,30 @@ $(document).ready(function () {
     })
 
     $('.nav div.nav-search').on('click', function () {
-        $('div.nav-see').removeClass('active');
-        $('div.nav-search').addClass('active');
 
-        $('#board-area').removeClass('active').hide();
-        $('#see-area').hide();
-        $('#write-area').show();
+        if ($.cookie('token')) {
+            $.ajaxSetup({
+                headers:{
+                    'Authorization': $.cookie('token')
+                }
+            })
+
+            $('div.nav-see').removeClass('active');
+            $('div.nav-search').addClass('active');
+
+            $('#board-area').removeClass('active').hide();
+            $('#see-area').hide();
+
+            $('#write-area').show();
+
+        } else {
+            alert('로그인이 필요한 서비스 입니다.')
+            let isLogin = confirm('로그인 하시겠습니까?');
+
+            if (isLogin) {
+                window.location.href = '/api/user/loginView';
+            }
+        }
     })
 
     $('#see-area').show();
@@ -34,81 +63,152 @@ function clearModalForm() {
     $('#deletePassword').empty();
 }
 
+function saveComment() {
+
+    if ($.cookie('token')) {
+        let contents = $('#floatingTextarea2').val();
+
+        if (contents === '') {
+            alert("댓글 내용을 입력해주세요");
+            return;
+        }
+
+        let board = document.getElementById('comment').dataset.id;
+
+        let data = { 'id': board, 'contents': contents };
+
+        $.ajax({
+            type: 'POST',
+            url: `/api/comments`,
+            headers: {
+                'Authorization': $.cookie('token')
+            },
+            data : JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+                alert(response.message);
+                $('#floatingTextarea2').empty();
+                window.location.reload();
+            },
+        });
+
+
+    } else {
+        alert('로그인이 필요한 서비스 입니다.')
+        let isLogin = confirm('로그인 하시겠습니까?');
+        if (isLogin) {
+            window.location.href = '/api/user/loginView';
+        }
+    }
+}
+
 function getBoard(id) {
-    $.ajax({
-        type: 'GET',
-        url: `/api/boards/${id}`,
-        success: function (response) {
 
-            console.log(response);
+    if ($.cookie('token')) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/boards/${id}`,
+            headers: {
+                'Authorization': $.cookie('token')
+            },
+            success: function (response) {
 
-            $('div.nav-see').removeClass('active');
-            $('div.nav-search').removeClass('active');
-            $('#see-area').hide();
-            $('#write-area').hide();
+                $('div.nav-see').removeClass('active');
+                $('div.nav-search').removeClass('active');
+                $('#see-area').hide();
+                $('#write-area').hide();
 
-            let tempHtml = `<h1 id="title">${response.title}</h1>
-                            <h5 id="writer">작성자 : ${response.writer}</h5>
-                            <h5 id="createdAt">작성일 : ${response.createdAt}</h5>
-                            <div id="board-btn">
-                                <button onclick="openUpdateModal()" type="button" class="btn btn-outline-primary">수 정</button>
-                                <button onclick="openDeleteModal()" type="button" class="btn btn-outline-danger">삭 제</button>
-                            </div>
-                            <hr id="board-hr">
-                            <div id="board-content">${response.contents}</div>
-                            
-                            <div id="container" class="popup-container">
-                                <div class="popup">
-                                    <h1>게시글 수정</h1>
-                                    <div class="mb-3" id="update-input">
-                                        <input type="password" class="form-control" id="updatePassword" placeholder="비밀번호">
-                                    </div>
-                                    
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a comment here" id="updateContents" style="height: 100px">${response.contents}</textarea>
-                                        <label for="updateContents">수정 내용</label>
-                                    </div>
-                                    
-                                    <div id="write-btn">
-                                        <button onclick="updateBoard(${response.id})" type="button" class="btn btn-outline-primary">수 정</button>
-                                        <button onclick="closeUpdateModal()" type="button" class="btn btn-outline-danger">취 소</button>
-                                    </div>
+                let tempHTML = `<h1 id="title">${response.title}</h1>
+                                <h5 id="writer">작성자 : ${response.writer}</h5>
+                                <h5 id="write-date">작성일 : ${response.date}</h5>
+                                <div id="board-btn">
+                                    <button onclick="openUpdateModal()" type="button" class="btn btn-outline-primary">수 정</button>
+                                    <button onclick="deleteBoard(${response.id})" type="button" class="btn btn-outline-danger">삭 제</button>
                                 </div>
-                            </div>
-
-                            <div id="container2" class="popup-container">
-                                <div class="popup">
-                                    <h1>게시글 삭제</h1>
-                                    <div class="mb-3" id="update-input">
-                                        <input type="password" class="form-control" id="deletePassword" placeholder="비밀번호">
+                                <hr id="board-hr">
+                                <div id="board-content">${response.contents}</div>
+                        
+                                <div id="container" class="popup-container">
+                                    <div class="popup">
+                                        <h1>게시글 수정</h1>
+                        
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="updateContents" style="height: 100px"></textarea>
+                                            <label for="updateContents">수정 내용</label>
+                                        </div>
+                        
+                                        <div id="write-btn2">
+                                            <button onclick="updateBoard(${response.id})" type="button" class="btn btn-outline-primary">수 정</button>
+                                            <button onclick="closeUpdateModal()" type="button" class="btn btn-outline-danger">취 소</button>
+                                        </div>
                                     </div>
-                                    <div id="write-btn">
-                                        <button onclick="deleteBoard(${response.id})" type="button" class="btn btn-outline-primary">삭 제</button>
-                                        <button onclick="closeDeleteModal()" type="button" class="btn btn-outline-danger">취 소</button>
-                                    </div>
-                                </div>
-                            </div>`
+                                </div>`
 
-            $('#board-area').empty().append(tempHtml).show();
-        },
-    })
+                $('#board-info').empty().append(tempHTML);
+
+                if (`${response.mine}` === 'false') {
+                    $('#board-btn').hide()
+                }
+
+                let comment = document.getElementById('comment');
+                comment.dataset.id = `${response.id}`;
+
+                $('#comments').empty();
+                for (const comment of response['comments']) {
+                    let tempHtml = `<div id="comment-info">
+                                        <div id="comment-writer">${comment.writer}</div>
+                                        <div id="comment-date">${comment.date}</div>
+                                        <div id="comment-btn">
+                                            <button onclick="openCommentUpdateModal(${comment.id})" type="button" class="btn btn-outline-primary">수 정</button>
+                                            <button onclick="deleteComment(${comment.id})" type="button" class="btn btn-outline-danger">삭 제</button>
+                                        </div>
+                                    </div>
+                                    <div id="comment-contents">${comment.contents}</div>
+                                    <hr/>`
+                    $('#comments').append(tempHtml);
+                }
+
+                $('#board-area').show();
+            },
+        });
+    } else { // 토큰이 없는 경우
+        $.ajax({
+            type: 'GET',
+            url: `/boards/${id}`,
+            success: function (response) {
+                $('div.nav-see').removeClass('active');
+                $('div.nav-search').removeClass('active');
+                $('#see-area').hide();
+                $('#write-area').hide();
+
+                let tempHTML = `<h1 id="title">${response.title}</h1>
+                                <h5 id="writer">작성자 : ${response.writer}</h5>
+                                <h5 id="write-date">작성일 : ${response.date}</h5>
+                                <hr id="board-hr">
+                                <div id="board-content">${response.contents}</div>`
+
+                $('#board-info').empty().append(tempHTML);
+
+                $('#board-area').show();
+            },
+        });
+    }
 }
 
 function deleteBoard(id) {
 
-    let password = $('#deletePassword').val();
+    let isDelete = confirm('정말 삭제하시겠습니까?');
 
-    if (password === '') {
-        alert("비밀번호를 입력해주세요.");
+    if (isDelete === false) {
         return;
     }
-
-    let data = {'password':password};
 
     $.ajax({
         type: 'DELETE',
         url: `/api/boards/${id}`,
-        data: JSON.stringify(data),
+        headers: {
+            'Authorization': $.cookie('token')
+        },
         contentType: "application/json",
         success: function (response) {
             if (response === id) {
@@ -119,17 +219,10 @@ function deleteBoard(id) {
                 alert("비밀번호를 확인해 주세요!");
             }
         },
-    })
+    });
 }
 
 function updateBoard(id) {
-
-    let password = $('#updatePassword').val();
-
-    if (password === '') {
-        alert("비밀번호를 입력해주세요.");
-        return;
-    }
 
     let contents = $('#updateContents').val();
 
@@ -138,21 +231,24 @@ function updateBoard(id) {
         return;
     }
 
-    let data = {'password':password, 'contents': contents};
+    let data = {'contents': contents };
 
     $.ajax({
         type: 'PUT',
         url: `/api/boards/${id}`,
         data: JSON.stringify(data),
+        headers: {
+            'Authorization': $.cookie('token')
+        },
         contentType: "application/json",
         success: function (response) {
             if (response === id) {
                 alert("내용을 수정했습니다~");
-                $('#updatePassword').empty();
+                // $('#updatePassword').empty();
                 $('#updateContents').empty();
                 window.location.reload();
             } else {
-                alert("비밀번호를 확인해 주세요!");
+                alert("나중에 다시 시도해주세요.");
             }
         },
     })
@@ -198,18 +294,18 @@ function showBoards() {
 function saveBoard() {
 
     let title = $('#InputTitle').val();
-    let writer = $('#InputWriter').val();
-    let password = $('#InputPassword1').val();
-    let rePassword = $('#InputPassword2').val();
+    // let writer = $('#InputWriter').val();
+    // let password = $('#InputPassword1').val();
+    // let rePassword = $('#InputPassword2').val();
     let contents = $('#contents').val();
-    let result = saveValidation(title, writer, password, rePassword, contents);
+    let result = saveValidation(title, contents);
 
     if (result !== '') {
         alert(result);
         return
     }
 
-    let data = {'title': title, 'contents': contents, 'writer': writer, 'password':password};
+    let data = { 'title': title, 'contents': contents };
 
     $.ajax({
         type: "POST",
@@ -225,33 +321,33 @@ function saveBoard() {
 
 function clearForm() {
     $('#InputTitle').empty();
-    $('#InputWriter').empty();
-    $('#InputPassword1').empty();
-    $('#InputPassword2').empty();
+    // $('#InputWriter').empty();
+    // $('#InputPassword1').empty();
+    // $('#InputPassword2').empty();
     $('#contents').empty();
 }
 
-function saveValidation(t, w, p, r, c) {
+function saveValidation(t, c) {
 
     if (t === '') {
         return "제목을 입력해주세요.";
     }
 
-    if (w === '') {
-        return "작성자를 입력해주세요.";
-    }
-
-    if (p === '') {
-        return "비밀번호를 입력해주세요.";
-    }
-
-    if (r === '') {
-        return "확인 비밀번호를 입력해주세요.";
-    }
-
-    if (p !== r) {
-        return "비밀번호가 일치하지 않습니다."
-    }
+    // if (w === '') {
+    //     return "작성자를 입력해주세요.";
+    // }
+    //
+    // if (p === '') {
+    //     return "비밀번호를 입력해주세요.";
+    // }
+    //
+    // if (r === '') {
+    //     return "확인 비밀번호를 입력해주세요.";
+    // }
+    //
+    // if (p !== r) {
+    //     return "비밀번호가 일치하지 않습니다."
+    // }
 
     if (c === '') {
         return "내용을 입력해주세요."
