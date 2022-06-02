@@ -8,6 +8,7 @@ import spartayn.shop.community.dto.BoardContentsUpdateRequestDto;
 import spartayn.shop.community.dto.BoardCreateRequestDto;
 import spartayn.shop.community.dto.BoardDeleteRequestDto;
 import spartayn.shop.community.dto.BoardMainPageResponseDto;
+import spartayn.shop.community.security.UserDetailsImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,35 +37,23 @@ public class BoardService {
     }
 
     @Transactional
-    public Long save(BoardCreateRequestDto requestDto) {
-        return boardRepository.save(new Board(requestDto)).getId();
+    public Long save(BoardCreateRequestDto requestDto,
+                     UserDetailsImpl userDetails) {
+        return boardRepository.save(new Board(requestDto, userDetails)).getId();
     }
 
     // 특정 게시글 내용 수정
     @Transactional
     public Long update(Long id, BoardContentsUpdateRequestDto requestDto) {
-
         Board board = getBoard(id);
-
-        if (board.checkPassword(requestDto.getPassword())) {
-            board.updateContents(requestDto);
-            return id;
-        }
-
-        return 0L;
+        board.updateContents(requestDto);
+        return id;
     }
 
     // 특정 게시글 삭제
     @Transactional
-    public Long delete(Long id, BoardDeleteRequestDto requestDto) {
-
-        Board board = getBoard(id);
-
-        if (board.checkPassword(requestDto.getPassword())) {
-            boardRepository.deleteById(id);
-            return id;
-        }
-
-        return 0L;
+    public Long delete(Long id) {
+        boardRepository.deleteById(id);
+        return id;
     }
 }

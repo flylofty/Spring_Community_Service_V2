@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spartayn.shop.community.dto.BoardContentsUpdateRequestDto;
 import spartayn.shop.community.dto.BoardCreateRequestDto;
+import spartayn.shop.community.security.UserDetailsImpl;
 
 import javax.persistence.*;
 
@@ -25,15 +26,14 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String writer;
 
-    @Column(nullable = false)
-    private String password;
+//    @Column(nullable = false)
+//    private String password;
 
     // 게시글 작성
-    public Board(BoardCreateRequestDto requestDto) {
+    public Board(BoardCreateRequestDto requestDto, UserDetailsImpl userDetails) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.writer = requestDto.getWriter();
-        this.password = requestDto.getPassword();
+        this.writer = userDetails.getUsername();
     }
 
     // 게시글 내용 수정
@@ -42,7 +42,7 @@ public class Board extends Timestamped {
     }
 
     // 비밀번호 일치 확인
-    public boolean checkPassword(String inputPassword) {
-        return password.equals(inputPassword);
-    }
+//    public boolean checkPassword(String inputPassword) {
+//        return password.equals(inputPassword);
+//    }
 }

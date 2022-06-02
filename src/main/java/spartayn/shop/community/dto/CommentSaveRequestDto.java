@@ -1,15 +1,18 @@
 package spartayn.shop.community.dto;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BoardContentsUpdateRequestDto {
+public class CommentSaveRequestDto {
+
+    private Long id;
     private String contents;
 
-    public BoardContentsUpdateRequestDto(String contents) {
+    public CommentSaveRequestDto(Long id, String contents) {
+        this.id = id;
         this.contents = contents;
     }
 }

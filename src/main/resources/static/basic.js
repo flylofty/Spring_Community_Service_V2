@@ -1,14 +1,13 @@
+let commentId;
 $(document).ready(function () {
 
-    // if ($.cookie('token')) {
-    //     $.ajaxSetup({
-    //         headers:{
-    //             'Authorization': $.cookie('token')
-    //         }
-    //     })
-    // } else {
-    //     window.location.href = '/user/loginView';
-    // }
+    if ($.cookie('token')) {
+        let tempHtml = `<a id="logout-text" href="javascript:{}" onclick="userLogout()">로그아웃</a>`
+        $('#header').append(tempHtml)
+    } else {
+        let tempHtml = `<a id="login-text" href="javascript:{}" onclick="window.location.href='/api/user/loginView'">로그인</a>`
+        $('#header').append(tempHtml)
+    }
 
     $('#close').on('click', function () {
         $('#container').removeClass('active');
@@ -61,6 +60,27 @@ function clearModalForm() {
     $('#updatePassword').empty();
     $('#updateContents').empty();
     $('#deletePassword').empty();
+}
+
+function userLogout() {
+    let isLogout = confirm('정말 로그아웃 하시겠습니까?');
+
+    if (isLogout === false) {
+        return;
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/user/logout`,
+        success: function (response) {
+            $.removeCookie('token')
+            $.removeCookie('token')
+            window.location.reload();
+        }, error: function () {
+            console.log("실패!")
+        },
+    });
+
 }
 
 function saveComment() {
@@ -155,7 +175,9 @@ function getBoard(id) {
 
                 $('#comments').empty();
                 for (const comment of response['comments']) {
-                    let tempHtml = `<div id="comment-info">
+                    let tempHtml;
+                    if (`${comment.mine}` === 'true') {
+                        tempHtml = `<div id="comment-info">
                                         <div id="comment-writer">${comment.writer}</div>
                                         <div id="comment-date">${comment.date}</div>
                                         <div id="comment-btn">
@@ -164,10 +186,36 @@ function getBoard(id) {
                                         </div>
                                     </div>
                                     <div id="comment-contents">${comment.contents}</div>
-                                    <hr/>`
+                                    <hr/>`;
+                    } else {
+                        tempHtml = `<div id="comment-info">
+                                        <div id="comment-writer">${comment.writer}</div>
+                                        <div id="comment-date">${comment.date}</div>
+                                    </div>
+                                    <div id="comment-contents">${comment.contents}</div>
+                                    <hr/>`;
+                    }
+
                     $('#comments').append(tempHtml);
                 }
 
+                let modalHtml = `<div id="container2" class="popup-container">
+                                    <div class="popup">
+                                        <h1>댓글 수정</h1>
+                        
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="updateComment" style="height: 100px"></textarea>
+                                            <label for="updateComment">수정 내용</label>
+                                        </div>
+                        
+                                        <div id="write-btn5">
+                                            <button onclick="updateComment()" type="button" class="btn btn-outline-primary">수 정</button>
+                                            <button onclick="closeCommentUpdateModal()" type="button" class="btn btn-outline-danger">취 소</button>
+                                        </div>
+                                    </div>
+                                </div>`
+
+                $('#comments').append(modalHtml);
                 $('#board-area').show();
             },
         });
@@ -189,10 +237,68 @@ function getBoard(id) {
 
                 $('#board-info').empty().append(tempHTML);
 
+                $('#comments').empty();
+                for (const comment of response['comments']) {
+
+                    let tempHtml = `<div id="comment-info">
+                                        <div id="comment-writer">${comment.writer}</div>
+                                        <div id="comment-date">${comment.date}</div>
+                                    </div>
+                                    <div id="comment-contents">${comment.contents}</div>
+                                    <hr/>`;
+
+                    $('#comments').append(tempHtml);
+                }
                 $('#board-area').show();
             },
         });
     }
+}
+
+function deleteComment(id) {
+
+    let isDelete = confirm('정말 삭제하시겠습니까?');
+
+    if (isDelete === false) {
+        return;
+    }
+
+    $.ajax({
+        type: 'DELETE',
+        url: `/api/comments/${id}`,
+        headers: {
+            'Authorization': $.cookie('token')
+        },
+        success: function (response) {
+            alert("댓글을 삭제했습니다")
+            window.location.reload();
+        },
+    });
+}
+
+function updateComment() {
+    let contents = $('#updateComment').val();
+
+    if (contents === '') {
+        alert("수정 내용을 입력해주세요.");
+        return;
+    }
+
+    let data = {'contents': contents };
+
+    $.ajax({
+        type: 'PUT',
+        url: `/api/comments/${commentId}`,
+        data: JSON.stringify(data),
+        headers: {
+            'Authorization': $.cookie('token')
+        },
+        contentType: "application/json",
+        success: function (response) {
+            alert("댓글을 수정했습니다")
+            window.location.href = '/';
+        },
+    })
 }
 
 function deleteBoard(id) {
@@ -254,11 +360,12 @@ function updateBoard(id) {
     })
 }
 
-function closeDeleteModal() {
+function closeCommentUpdateModal() {
     $('#container2').removeClass('active');
 }
 
-function openDeleteModal() {
+function openCommentUpdateModal(id) {
+    commentId = id;
     $('#container2').addClass('active');
 }
 

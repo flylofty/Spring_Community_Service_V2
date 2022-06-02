@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BoardContentsUpdateRequestDto {
+public class CommentUpdateRequestDto {
     private String contents;
 
-    public BoardContentsUpdateRequestDto(String contents) {
+    public CommentUpdateRequestDto(String contents) {
         this.contents = contents;
     }
 }
